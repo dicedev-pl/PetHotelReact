@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import React, {useState} from 'react';
+import {Button, Form, Input, message} from 'antd';
 import axios from 'axios';
 import {Md5} from "ts-md5";
 
@@ -12,21 +12,23 @@ const md5Hash = (str: string) => {
     return Md5.hashAsciiStr(str);
 };
 
+const hashedPasswd = (login: string, password: string) => {
+    const md5 = md5Hash(login + ":" + password);
+    return base64Encode(md5)
+}
 const LoginForm: React.FC = () => {
     const [loading, setLoading] = useState(false);
 
+
     const onFinish = async (values: { login: string; password: string }) => {
-        const { login, password } = values;
-        const md5 = md5Hash(login+ ":" + password);
-        const encodedPassword = base64Encode(md5)
-        console.log(md5);
-        console.log(encodedPassword);
+        const {login, password} = values;
+        const pwHash = hashedPasswd(login, password);
 
         try {
             setLoading(true);
             const response = await axios.post('http://localhost:8081/v2/authentication/login', {
                 login,
-                password: encodedPassword,
+                password: pwHash,
             });
 
             if (response.status === 200 && response.data.token) {
@@ -50,22 +52,22 @@ const LoginForm: React.FC = () => {
             name="login"
             layout="vertical"
             onFinish={onFinish}
-            initialValues={{ remember: true }}
+            initialValues={{remember: true}}
         >
             <Form.Item
                 label="Username"
                 name="login"
-                rules={[{ required: true, message: 'Please input your username!' }]}
+                rules={[{required: true, message: 'Please input your username!'}]}
             >
-                <Input />
+                <Input/>
             </Form.Item>
 
             <Form.Item
                 label="Password"
                 name="password"
-                rules={[{ required: true, message: 'Please input your password!' }]}
+                rules={[{required: true, message: 'Please input your password!'}]}
             >
-                <Input.Password />
+                <Input.Password/>
             </Form.Item>
 
             <Form.Item>
