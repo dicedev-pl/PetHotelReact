@@ -1,23 +1,14 @@
-import React, { useState } from 'react';
-import {Form, Input, Button, message, Select} from 'antd';
+import { useState } from 'react';
+import { Form, Input, Button, message, Select } from 'antd';
 import axios from 'axios';
-import {Md5} from "ts-md5";
+import { Md5 } from "ts-md5";
+import { rightsOptions } from "../utils/Enums.ts";
 
 interface AddUserFormValues {
   username: string;
   password: string;
   rights: string[];
 }
-
-const rightsOptions = [
-  'USER',
-  'TRAINEE',
-  'ADD_USERS',
-  'REMOVE_USERS',
-  'ORDER_FOOD',
-  'ADD_RESERVATIONS',
-  'REMOVE_RESERVATIONS'
-];
 
 const base64Encode = (str: string) => {
   return btoa(decodeURI(encodeURIComponent(str)));
@@ -33,7 +24,11 @@ const hashedPasswd = (login: string, password: string) => {
   return base64Encode(md5)
 }
 
-const UserAddForm: React.FC<{ token: string }> = ({ token }) => {
+
+interface AddUserFormProps {
+  token?: string
+}
+const AddUserForm = ({ token } : AddUserFormProps) => {
   const [loading, setLoading] = useState(false);
   // Helper function to extract first 10 characters of a string
   const getFirst10Chars = (str: string) => {
@@ -70,6 +65,7 @@ const UserAddForm: React.FC<{ token: string }> = ({ token }) => {
       } else {
         message.error('Failed to add user.');
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       message.error('Failed to add user. Please try again.');
     } finally {
@@ -120,4 +116,4 @@ const UserAddForm: React.FC<{ token: string }> = ({ token }) => {
   );
 };
 
-export default UserAddForm;
+export default AddUserForm;

@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Button, Form, Input, message} from 'antd';
+import { useState } from 'react';
+import { Button, Form, Input, message } from 'antd';
 import axios from 'axios';
-import {Md5} from "ts-md5";
+import { Md5 } from "ts-md5";
 
 
 const base64Encode = (str: string) => {
@@ -16,12 +16,16 @@ const hashedPasswd = (login: string, password: string) => {
   const md5 = md5Hash(login + ":" + password);
   return base64Encode(md5)
 }
-const LoginForm: React.FC = () => {
+
+interface LoginFormProps {
+  setLogged: (value: boolean) => void
+}
+
+const LoginForm = ({ setLogged }: LoginFormProps) => {
   const [loading, setLoading] = useState(false);
 
-
   const onFinish = async (values: { login: string; password: string }) => {
-    const {login, password} = values;
+    const { login, password } = values;
     const pwHash = hashedPasswd(login, password);
 
     try {
@@ -35,12 +39,14 @@ const LoginForm: React.FC = () => {
         const token = response.data.token;
         localStorage.setItem('authToken', token);  // Save token in localStorage
         message.success('Login successful!');
+        setLogged(true);
         // Handle additional logic after successful login (e.g., redirect)
       } else if (response.data.token === null) {
         message.error('Incorrect login or password.');
       } else {
         message.error('Login failed.');
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       message.error('Login failed. Please check your credentials.');
     } finally {
@@ -52,12 +58,12 @@ const LoginForm: React.FC = () => {
       name="login"
       layout="vertical"
       onFinish={onFinish}
-      initialValues={{remember: true}}
+      initialValues={{ remember: true }}
     >
       <Form.Item
         label="Username"
         name="login"
-        rules={[{required: true, message: 'Please input your username!'}]}
+        rules={[{ required: true, message: 'Please input your username!' }]}
       >
         <Input/>
       </Form.Item>
@@ -65,7 +71,7 @@ const LoginForm: React.FC = () => {
       <Form.Item
         label="Password"
         name="password"
-        rules={[{required: true, message: 'Please input your password!'}]}
+        rules={[{ required: true, message: 'Please input your password!' }]}
       >
         <Input.Password/>
       </Form.Item>
