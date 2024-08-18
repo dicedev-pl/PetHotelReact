@@ -25,5 +25,6 @@ export default tseslint.config({
       { allowConstantExport: true },
     ],
     '@stylistic/ts/indent': ['error', 2],
+    '@stylistic/ts/object-curly-spacing': ['error', 'always'],
   },
 })

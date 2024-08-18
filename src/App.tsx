@@ -1,21 +1,27 @@
 import './App.css'
-import {Layout} from "antd";
-import {Content} from "antd/es/layout/layout";
+import { Layout } from "antd";
+import { Content } from "antd/es/layout/layout";
 import LoginForm from "./login/LoginForm.tsx";
 import MainView from "./mainView/MainView.tsx";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [logged, setLogged] = useState<boolean>(false);
+  const token: string | null = localStorage.getItem('authToken');
 
-  const token = localStorage.getItem('authToken');
+  useEffect(() => {
+    if (token) {setLogged(true);}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
-      { token ? (
-        <MainView token={token} />
+      { (token && logged) ? (
+        <MainView token={ token } />
       ) : (
         <Layout style={{ height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
           <Content>
-            <LoginForm />
+            <LoginForm setLogged={setLogged} />
           </Content>
         </Layout>
       )}
