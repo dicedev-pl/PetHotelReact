@@ -28,6 +28,7 @@ const hashedPasswd = (login: string, password: string) => {
 interface AddUserFormProps {
   token?: string
 }
+
 const AddUserForm = ({ token } : AddUserFormProps) => {
   const [loading, setLoading] = useState(false);
   // Helper function to extract first 10 characters of a string
