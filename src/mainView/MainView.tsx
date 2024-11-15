@@ -1,12 +1,13 @@
 import { Layout, Menu } from "antd";
 import { rightsOptions } from "../utils/Enums.ts";
 import ph_icon from "../assets/ph_icon.svg"
-import { useState } from "react";
 import InDevelop from "../inDevelop/InDevelop.tsx";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import AddUserForm from "../addUser/AddUserForm.tsx";
 import { ItemType } from "antd/es/menu/interface";
 import { MenuInfo } from "rc-menu/lib/interface";
+import User from "../user/User.tsx";
+import AddReservationForm from "../addReservations/AddReservationForm.tsx";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -27,7 +28,7 @@ const items = (): RouterItemType[] => {
 }
 
 const MainView = ({ token }: MainViewProps) => {
-  const [currentView, setCurrentView] = useState<string | undefined>("USER");
+  // const [currentView, setCurrentView] = useState<string | undefined>("USER");
   const navigate = useNavigate();
 
   const menuChoose = (e: MenuInfo) => {
@@ -36,11 +37,11 @@ const MainView = ({ token }: MainViewProps) => {
             ?? { key: "", label: "", path: "/" };
     const item = selectedItem as unknown as RouterItemType;
 
-    setCurrentView(item.key as string);
+    // setCurrentView(item.key as string);
     navigate(item.path as string);
   }
 
-  const containsString = (i: string) => token?.includes(i);
+  // const containsString = (i: string) => token?.includes(i);
 
   return (
     <Layout style={{
@@ -79,8 +80,16 @@ const MainView = ({ token }: MainViewProps) => {
             <Routes>
               <Route path="/" element={<InDevelop/>}/>
               <Route
-                path="/user"
+                path="/add-users"
                 element={<AddUserForm token={token}/>}
+              />
+              <Route
+                path="/user"
+                element={<User token={token}/>}
+              />
+              <Route
+                path="/add-reservations"
+                element={<AddReservationForm token={token}/>}
               />
             </Routes>
             {/*{currentView === "USER" && containsString("USER") &&*/}
